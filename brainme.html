@@ -1,0 +1,35 @@
+<head>
+    <title>brainme</title>
+</head>
+
+<template name="startpage">
+    <div class="startpage">
+        <h1>BrainMe</h1>
+
+        <p class="center">
+            This game was written in Nov 2014
+        </p>
+
+        {{> loginButtons}}
+
+        <ul class="gameList">
+            {{#each games}}
+            {{> gameMiniView }}
+            {{/each}}
+        </ul>
+    </div>
+</template>
+
+<template name="gameMiniView">
+    <li>
+        <a href="/game/{{ gameNumber }}">{{ player1 }} VS. {{ player2 }}</a>
+    </li>
+</template>
+
+<template name="game">
+    <h1>GAME NUMBER {{ gameNumber }}</h1>
+
+    <h2>{{ player1 }} VS. {{ player2 }}</h2>
+
+    <a href="/">Home</a>
+</template>
