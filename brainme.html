@@ -31,5 +31,11 @@
 
     <h2>{{ player1 }} VS. {{ player2 }}</h2>
 
+    {{#if yourturn }}
+        YOURS
+    {{else}}
+        WAITING
+    {{/if}}
+
     <a href="/">Home</a>
 </template>
