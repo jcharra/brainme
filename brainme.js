@@ -31,10 +31,11 @@ if (Meteor.isClient) {
 
     Template.game.helpers({
         yourturn: function () {
+            console.error("player1 " + this.player1 + " metuser "+Meteor.user().username);
             if (this.player1 == Meteor.user().username) {
-                return this.answers2.length % 3 == 0 && this.answers1.length - this.answers2.length <= 3;
+                return this.answersP2.length % 3 == 0 && this.answersP1.length - this.answersP2.length <= 3;
             } else {
-                return this.answers1.length % 3 == 0 && this.answers1.length > this.answers2.length;
+                return this.answersP1.length % 3 == 0 && this.answersP1.length > this.answersP2.length;
             }
         }
     });
