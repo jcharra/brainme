@@ -32,10 +32,16 @@
     <h2>{{ player1 }} VS. {{ player2 }}</h2>
 
     {{#if yourturn }}
-        YOURS
+        <a href="{{ gameNumber }}/play">PLAY</a>
     {{else}}
         WAITING
     {{/if}}
 
     <a href="/">Home</a>
+</template>
+
+<template name="play">
+    {{#each questions}}
+        {{ this }}
+    {{/each}}
 </template>
