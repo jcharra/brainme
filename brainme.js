@@ -120,6 +120,15 @@ if (Meteor.isServer) {
         category: "geography"
     });
 
+    Questions.insert({
+        idx: 7,
+        text: "Was ist ein beliebtes Getränk unter Schachspielern?",
+        answers: ["Gestrecktes Achtel", "Geschenktes Viertel", "Gespritzte Halbe", "Gelungene Ganze"],
+        correct: 2,
+        category: "chess"
+    });
+
+
     var num_questions = Meteor.call("maxQID");
 
     var selectQuestions = function(amount) {
