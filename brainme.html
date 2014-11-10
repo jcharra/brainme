@@ -42,4 +42,10 @@
 
 <template name="play">
     <h4>{{ text }}</h4>
+
+    <ul>
+        {{#each answers}}
+            <a class="answer" href="#">{{ this }}</a>
+        {{/each}}
+    </ul>
 </template>

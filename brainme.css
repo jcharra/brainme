@@ -1,1 +1,17 @@
-/* CSS declarations go here */
+
+h4 {
+    margin: auto;
+    padding: 30px;
+}
+
+a.answer {
+    padding: 20px 50px;
+    margin: 5px;
+    width: 20%;
+    list-style-type: none;
+    background: #6666ff;
+}
+
+a.answer:hover {
+    background: #a61717;
+}

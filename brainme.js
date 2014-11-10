@@ -31,9 +31,24 @@ if (Meteor.isClient) {
         });
     });
 
+    var isPlayersTurn = function (game) {
+        console.error("Game is " + game);
+        if (game.player1 == Meteor.user().username) {
+            console.error("player 1: "+ (game.answersP2.length % 3 == 0 && game.answersP1.length - game.answersP2.length <= 3));
+            return game.answersP2.length % 3 == 0 && game.answersP1.length - game.answersP2.length <= 3;
+        } else if (game.player2 == Meteor.user().username) {
+            console.error("player 2");
+            return game.answersP1.length % 3 == 0 && game.answersP1.length > game.answersP2.length;
+        } else {
+            console.error("NO player");
+            return false;
+        }
+    };
+
+
     Template.game.helpers({
         yourturn: function () {
-            return Meteor.call("isPlayersTurn", this);
+            return isPlayersTurn(this);
         }
     });
 
@@ -42,7 +57,7 @@ if (Meteor.isClient) {
             data: function () {
                 var game = Games.findOne({gameNumber: parseInt(this.params._gameid)});
                 console.error("Game is "+ game);
-                if (game && Meteor.call("isPlayersTurn", game)) {
+                if (game && isPlayersTurn(game)) {
                     var num_questions_answered;
                     if (Meteor.user().username == game.player1) {
                         num_questions_answered = game.answersP1.length;
@@ -80,19 +95,6 @@ Meteor.methods({
         // var q = Questions.find({}, {sort: {"idx": -1}, limit: 1}).fetch();
         // return q.idx;
         return 6;
-    },
-    isPlayersTurn: function (game) {
-        console.error("Game is " + game);
-        if (game.player1 == Meteor.user().username) {
-            console.error("player 1: "+ (game.answersP2.length % 3 == 0 && game.answersP1.length - game.answersP2.length <= 3));
-            return game.answersP2.length % 3 == 0 && game.answersP1.length - game.answersP2.length <= 3;
-        } else if (game.player2 == Meteor.user().username) {
-            console.error("player 2");
-            return game.answersP1.length % 3 == 0 && game.answersP1.length > game.answersP2.length;
-        } else {
-            console.error("NO player");
-            return false;
-        }
     }
 });
 
