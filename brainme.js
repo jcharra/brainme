@@ -4,9 +4,19 @@ Category = new Mongo.Collection("categories");
 
 if (Meteor.isClient) {
     Meteor.subscribe("games");
+    Meteor.subscribe("questions");
 
     Router.route('/', function () {
-        this.render('startpage');
+        this.render('startpage', {
+            data: function() {
+                if (!Meteor.userId()) {
+                    return [];
+                } else {
+                    // TODO: restrict to logged-in player
+                    return Games.find({});
+                }
+            }
+        });
     });
 
     Router.route('/findOpponent', function () {
@@ -21,10 +31,30 @@ if (Meteor.isClient) {
         });
     });
 
+    Template.game.helpers({
+        yourturn: function () {
+            return Meteor.call("isPlayersTurn", this);
+        }
+    });
+
     Router.route('/game/:_gameid/play', function () {
         this.render('play', {
             data: function () {
-                return Games.findOne({gameNumber: parseInt(this.params._gameid)});
+                var game = Games.findOne({gameNumber: parseInt(this.params._gameid)});
+                console.error("Game is "+ game);
+                if (game && Meteor.call("isPlayersTurn", game)) {
+                    var num_questions_answered;
+                    if (Meteor.user().username == game.player1) {
+                        num_questions_answered = game.answersP1.length;
+                    } else if (Meteor.user().username == game.player2) {
+                        num_questions_answered = game.answersP2.length;
+                    } else {
+                        throw new Meteor.Error("not-authorized");
+                    }
+                    return game.questions[num_questions_answered];
+                } else {
+                    return {};
+                }
             }
         });
     });
@@ -33,22 +63,9 @@ if (Meteor.isClient) {
         games: function () {
             if (Meteor.userId()) {
                 return Games.find({player1: Meteor.user().username});
-            }
-        }
-    });
-
-    Template.game.helpers({
-        yourturn: function () {
-            if (this.player1 == Meteor.user().username) {
-                return this.answersP2.length % 3 == 0 && this.answersP1.length - this.answersP2.length <= 3;
             } else {
-                return this.answersP1.length % 3 == 0 && this.answersP1.length > this.answersP2.length;
+                return {};
             }
-        },
-        randomQuestion: function() {
-            var numDocs = Questions.count({});
-            var idx = Math.ceil(Math.random() * numDocs);
-            Questions.find().limit(-1).skip(idx).next()
         }
     });
 
@@ -58,11 +75,24 @@ if (Meteor.isClient) {
 }
 
 Meteor.methods({
-    maxQID: function() {
+    maxQID: function () {
         // Y u no work?!
         // var q = Questions.find({}, {sort: {"idx": -1}, limit: 1}).fetch();
         // return q.idx;
         return 6;
+    },
+    isPlayersTurn: function (game) {
+        console.error("Game is " + game);
+        if (game.player1 == Meteor.user().username) {
+            console.error("player 1: "+ (game.answersP2.length % 3 == 0 && game.answersP1.length - game.answersP2.length <= 3));
+            return game.answersP2.length % 3 == 0 && game.answersP1.length - game.answersP2.length <= 3;
+        } else if (game.player2 == Meteor.user().username) {
+            console.error("player 2");
+            return game.answersP1.length % 3 == 0 && game.answersP1.length > game.answersP2.length;
+        } else {
+            console.error("NO player");
+            return false;
+        }
     }
 });
 
@@ -122,14 +152,14 @@ if (Meteor.isServer) {
 
     var num_questions = Meteor.call("maxQID");
 
-    var selectQuestions = function(amount) {
+    var selectQuestions = function (amount) {
         var qs = [];
         for (var i = 0; i < Math.min(amount, num_questions); i++) {
             while (true) {
                 var qid = Math.ceil(Math.random() * num_questions);
                 var q = Questions.findOne({"idx": qid});
-                if (q && qs.indexOf(qid) == -1) {
-                    qs.push(qid);
+                if (q && qs.indexOf(q) == -1) {
+                    qs.push(q);
                     break;
                 }
             }
