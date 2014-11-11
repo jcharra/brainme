@@ -13,7 +13,7 @@
         {{> loginButtons}}
 
         <ul class="gameList">
-            {{#each games}}
+            {{#each yourgames}}
             {{> gameMiniView }}
             {{/each}}
         </ul>
@@ -33,8 +33,6 @@
 
     {{#if yourturn }}
         <a href="{{ gameNumber }}/play">PLAY</a>
-    {{else}}
-        WAITING
     {{/if}}
 
     <a href="/">Home</a>

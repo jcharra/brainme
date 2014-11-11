@@ -7,16 +7,22 @@ if (Meteor.isClient) {
     Meteor.subscribe("questions");
 
     Router.route('/', function () {
-        this.render('startpage', {
-            data: function() {
-                if (!Meteor.userId()) {
-                    return [];
-                } else {
-                    // TODO: restrict to logged-in player
-                    return Games.find({});
-                }
+        this.render('startpage');
+    });
+
+    Template.startpage.helpers({
+        yourgames: function () {
+            if (!Meteor.userId()) {
+                return [];
+            } else {
+                var user = Meteor.user().username;
+                return Games.find({
+                    $or: [
+                        {player1: user},
+                        {player2: user}
+                    ]});
             }
-        });
+        }
     });
 
     Router.route('/findOpponent', function () {
@@ -32,19 +38,14 @@ if (Meteor.isClient) {
     });
 
     var isPlayersTurn = function (game) {
-        console.error("Game is " + game);
         if (game.player1 == Meteor.user().username) {
-            console.error("player 1: "+ (game.answersP2.length % 3 == 0 && game.answersP1.length - game.answersP2.length <= 3));
             return game.answersP2.length % 3 == 0 && game.answersP1.length - game.answersP2.length <= 3;
         } else if (game.player2 == Meteor.user().username) {
-            console.error("player 2");
             return game.answersP1.length % 3 == 0 && game.answersP1.length > game.answersP2.length;
         } else {
-            console.error("NO player");
             return false;
         }
     };
-
 
     Template.game.helpers({
         yourturn: function () {
@@ -56,7 +57,6 @@ if (Meteor.isClient) {
         this.render('play', {
             data: function () {
                 var game = Games.findOne({gameNumber: parseInt(this.params._gameid)});
-                console.error("Game is "+ game);
                 if (game && isPlayersTurn(game)) {
                     var num_questions_answered;
                     if (Meteor.user().username == game.player1) {
@@ -74,13 +74,9 @@ if (Meteor.isClient) {
         });
     });
 
-    Template.startpage.helpers({
-        games: function () {
-            if (Meteor.userId()) {
-                return Games.find({player1: Meteor.user().username});
-            } else {
-                return {};
-            }
+    Template.play.events({
+        "click .answer": function () {
+            Meteor.call("setChecked", this._id, !this.checked);
         }
     });
 
