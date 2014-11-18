@@ -155,6 +155,14 @@ if (Meteor.isServer) {
         correct: 2,
         category: "chess"
     });
+  
+    Questions.insert({
+        idx: 8,
+        text: 'Welches ist das "most-awesome" JavaScript-Framework?',
+        answers: ["<?php >", "HL-ActionFramework", "Ember.js", "Meteor"],
+        correct: 4,
+        category: "programming"
+    });
 
 
     var num_questions = Meteor.call("maxQID");
