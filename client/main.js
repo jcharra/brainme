@@ -1,6 +1,8 @@
 Meteor.subscribe("games");
 Meteor.subscribe("questions");
 
+var SESSIONKEY_CURRENT_GAME = "currgame";
+
 Router.route('/', function () {
     this.render('startpage');
 });
@@ -49,21 +51,28 @@ Template.game.helpers({
 });
 
 Router.route('/game/:_gameid/play', function () {
-    // TODO: Make this a gateway URL which checks
-    // if it's your turn, then redirects to /game/gameid/question_id
-
     this.render('play', {
         data: function () {
-            var game = Games.findOne({gameNumber: parseInt(this.params._gameid)});
+            var game_id = this.params._gameid;
+            var game = Games.findOne({gameNumber: parseInt(game_id)});
+
             if (game && isPlayersTurn(game)) {
                 var num_questions_answered;
+
                 if (Meteor.user().username == game.player1) {
                     num_questions_answered = game.answersP1.length;
+                    // insert dummy answer to disallow trying again by browser back/forward
+                    game.answersP1.push(null);
                 } else if (Meteor.user().username == game.player2) {
                     num_questions_answered = game.answersP2.length;
+                    // same here, insert dummy
+                    game.answersP2.push(null);
                 } else {
                     throw new Meteor.Error("not-authorized");
                 }
+
+                Session.set(SESSIONKEY_CURRENT_GAME, game_id);
+
                 return game.questions[num_questions_answered];
             } else {
                 return {};
@@ -74,4 +83,11 @@ Router.route('/game/:_gameid/play', function () {
 
 Accounts.ui.config({
     passwordSignupFields: "USERNAME_ONLY"
+});
+
+Template.play.events({
+        "click .answer": function (event) {
+            var game_id = Session.get(SESSIONKEY_CURRENT_GAME);
+            Meteor.call("setAnswer", game_id, Meteor.userId(), this.idx, event.target.text);
+        }
 });
