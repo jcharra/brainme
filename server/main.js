@@ -7,16 +7,14 @@ var players = ["Joe", "Pete", "Mary", "Alice", "Mike", "Sue"];
 Questions.insert({
     idx: 1,
     text: "Was ist die Hauptstadt von Deutschland?",
-    answers: ["Prag", "Berlin", "Bonn", "Denzlingen"],
-    correct: 1,
+    answers: ["Berlin", "Prag", "Bonn", "Denzlingen"],
     category: "geography"
 });
 
 Questions.insert({
     idx: 2,
     text: "Was ist die Hauptstadt der Schweiz?",
-    answers: ["Prag", "Bern", "Paris", "Basel"],
-    correct: 1,
+    answers: ["Bern", "Paris", "Basel", "Prag"],
     category: "geography"
 });
 
@@ -24,47 +22,41 @@ Questions.insert({
     idx: 3,
     text: "Was ist die Hauptstadt von Frankreich?",
     answers: ["Paris", "Bordeaux", "Cannes", "Marseille"],
-    correct: 0,
     category: "geography"
 });
 
 Questions.insert({
     idx: 4,
     text: "Was ist die Hauptstadt von England?",
-    answers: ["Prag", "Berlin", "Bonn", "London"],
-    correct: 3,
+    answers: ["London", "Prag", "Berlin", "Bonn"],
     category: "geography"
 });
 
 Questions.insert({
     idx: 5,
     text: "Was ist die Hauptstadt von Spanien?",
-    answers: ["Prag", "Madrid", "Bonn", "Denzlingen"],
-    correct: 1,
+    answers: ["Madrid", "Bonn", "Denzlingen", "Prag"],
     category: "geography"
 });
 
 Questions.insert({
     idx: 6,
     text: "Was ist die Hauptstadt von Argentinien?",
-    answers: ["Prag", "Madrid", "Buenos Aires", "Denzlingen"],
-    correct: 2,
+    answers: ["Buenos Aires", "Prag", "Madrid", "Denzlingen"],
     category: "geography"
 });
 
 Questions.insert({
     idx: 7,
     text: "Was ist ein beliebtes Getränk unter Schachspielern?",
-    answers: ["Gestrecktes Achtel", "Geschenktes Viertel", "Gespritzte Halbe", "Gelungene Ganze"],
-    correct: 2,
+    answers: ["Gespritzte Halbe", "Gestrecktes Achtel", "Geschenktes Viertel", "Gelungene Ganze"],
     category: "chess"
 });
 
 Questions.insert({
     idx: 8,
     text: 'Welches ist das "most-awesome" JavaScript-Framework?',
-    answers: ["<?php >", "HL-ActionFramework", "Ember.js", "Meteor"],
-    correct: 4,
+    answers: ["Meteor", "<?php >", "HL-ActionFramework", "Ember.js"],
     category: "programming"
 });
 
