@@ -41,9 +41,11 @@
 <template name="play">
     <h4>{{ text }}</h4>
 
-    <ul>
+    <ul id="{{ idx }}" class="answerList">
         {{#each answers}}
-            <a class="answer" href="#">{{ this }}</a>
+            <li class="answer">
+                <a href="#">{{ this }}</a>
+            </li>
         {{/each}}
     </ul>
 </template>

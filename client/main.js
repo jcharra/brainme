@@ -88,6 +88,9 @@ Accounts.ui.config({
 Template.play.events({
         "click .answer": function (event) {
             var game_id = Session.get(SESSIONKEY_CURRENT_GAME);
-            Meteor.call("setAnswer", game_id, Meteor.userId(), this.idx, event.target.text);
+            var question_id = event.target.parentNode.id;
+            var user = Meteor.user() ? Meteor.user().username : null;
+            var answer_is_correct = Meteor.call("setAnswer", game_id, user, question_id, event.target.text);
+            event.target.className = answer_is_correct ? "correct" : "incorrect";
         }
 });

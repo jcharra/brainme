@@ -4,7 +4,7 @@ h4 {
     padding: 30px;
 }
 
-a.answer {
+ul.answerList li {
     padding: 20px 50px;
     margin: 5px;
     width: 20%;
@@ -12,6 +12,10 @@ a.answer {
     background: #6666ff;
 }
 
-a.answer:hover {
-    background: #a61717;
+ul.answerList li.correct {
+    background: #00ff00;
+}
+
+ul.answerList li.incorrect {
+    background: #ff0000;
 }
